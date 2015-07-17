@@ -2,8 +2,14 @@
   "name": "jswiremock",
   "version": "0.1.0",
   "description": "A library used for stubbing and mocking web services.",
+  "scripts": { "test": "mocha tests/*" },
   "private": false,
   "dependencies": {
     "express": "~4.11.1"
+  },
+  "devDependencies": {
+    "mocha": "2.1.0",
+    "chai": "1.10.0",
+    "assert": "1.3.0"
   }
 }
