@@ -1,4 +1,4 @@
-# jswiremock
+# jswiremock [![Build Status](https://travis-ci.org/jlidder/jswiremock.svg?branch=master)](https://travis-ci.org/jlidder/jswiremock)
 
 Miss WireMock in Java? This is the Nodejs sibling to WireMock. At least that is the goal!
 
