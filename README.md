@@ -26,12 +26,6 @@ stubFor(jswiremock, get(urlEqualTo("/1"))
 
 Everything is built on top of Express js.
 
-______________
-| Our Logic  |
-|____________|
-| Express.js |
-|____________|
-
 ## Issues or new feature requests
 
 Please feel free to use github's built-in issue tracking feature.
