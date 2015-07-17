@@ -1,0 +1,9 @@
+{
+  "name": "jswiremock",
+  "version": "0.1.0",
+  "description": "A library used for stubbing and mocking web services.",
+  "private": false,
+  "dependencies": {
+    "express": "~4.11.1"
+  }
+}
