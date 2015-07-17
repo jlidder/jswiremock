@@ -20,6 +20,8 @@ stubFor(jswiremock, get(urlEqualTo("/1"))
         .withStatus(200)
         .withHeader({"Content-Type": "application/json"})
         .withBody("[{\"status\":\"success\", \"custom_audience_id\":\"12345\", \"lookalike_audience_id\": \"678999\"}]")));
+
+jswiremock.stop_js_wire_mock();
 ```
 
 ## Design

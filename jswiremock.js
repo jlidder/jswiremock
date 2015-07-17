@@ -28,7 +28,7 @@ exports.jswiremock = function(port){
     };
 
     this.stop_js_wire_mock = function(){
-        server.exit();
+        server.close();
     };
 
     app.get('/*', function (req, res) {
