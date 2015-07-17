@@ -2,7 +2,9 @@
   "name": "jswiremock",
   "version": "0.1.0",
   "description": "A library used for stubbing and mocking web services.",
-  "scripts": { "test": "mocha tests/*" },
+  "scripts": {
+    "test": "mocha tests/*"
+  },
   "private": false,
   "dependencies": {
     "express": "~4.11.1"
@@ -11,5 +13,22 @@
     "mocha": "2.1.0",
     "chai": "1.10.0",
     "assert": "1.3.0"
-  }
+  },
+  "main": "jswiremock.js",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jlidder/jswiremock.git"
+  },
+  "keywords": [
+    "mock"
+  ],
+  "author": "Jaspreet Lidder (http://jaspreetlidder.com)",
+  "license": "GNU",
+  "bugs": {
+    "url": "https://github.com/jlidder/jswiremock/issues"
+  },
+  "homepage": "https://github.com/jlidder/jswiremock"
 }
