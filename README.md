@@ -7,6 +7,10 @@ Miss WireMock in Java? This is the Nodejs sibling to WireMock. At least that is 
 - Simple GET and POST requests can be mocked.
 - Fixed URL stubs. (Dynamic stubs (random id's for ex) are being worked for v0.2).
 
+## Installation
+        $ npm install express
+
+
 ## How to use it?
 
 ```javascript
