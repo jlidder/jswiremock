@@ -8,7 +8,7 @@ Miss WireMock in Java? This is the Nodejs sibling to WireMock. At least that is 
 - Fixed URL stubs. (Dynamic stubs (random id's for ex) are being worked for v0.2).
 
 ## Installation
-     $ npm install express
+     $ npm install jswiremock
 
 
 ## How to use it?
