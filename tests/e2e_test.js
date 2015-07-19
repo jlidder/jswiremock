@@ -17,8 +17,7 @@ describe('jswiremock library', function() {
                                         .withStatus(200)
                                         .withHeader({"Content-Type": "application/json"})
                                         .withBody("[{\"status\":\"success\", \"custom_audience_id\":\"12345\", \"lookalike_audience_id\": \"678999\"}]"));
-
-            assert.equal(mock_request.getUrl(), "/1", "URL do not match");
+            assert.equal(mock_request.getUrl().getData(), "1", "URL do not match");
             assert.equal(mock_request.getRequestType(), "GET");
             var mock_response = mock_request.get_mock_response();
             assert.equal(mock_response.getStatus(), 200);
