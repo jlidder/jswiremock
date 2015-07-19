@@ -46,12 +46,42 @@ describe('url_parser library', function() {
                     .withHeader({"Content-Type": "application/json"})
                     .withBody("[{\"status\":\"success\", \"custom_audience_id\":\"12345\", \"lookalike_audience_id\": \"678999\"}]"));
 
+            var mock_request_3 = get(urlEqualTo("/account/:varying_var/delete/"))
+                .willReturn(a_response()
+                    .withStatus(200)
+                    .withHeader({"Content-Type": "application/json"})
+                    .withBody("[{\"status\":\"success\", \"custom_audience_id\":\"12345\", \"lookalike_audience_id\": \"678999\"}]"));
+
+            var mock_request_4 = get(urlEqualTo("/:varying_var/delete/"))
+                .willReturn(a_response()
+                    .withStatus(200)
+                    .withHeader({"Content-Type": "application/json"})
+                    .withBody("[{\"status\":\"success\", \"custom_audience_id\":\"12345\", \"lookalike_audience_id\": \"678999\"}]"));
+
+            var mock_request_5 = get(urlEqualTo("/delete/:varying_var/"))
+                .willReturn(a_response()
+                    .withStatus(200)
+                    .withHeader({"Content-Type": "application/json"})
+                    .withBody("[{\"status\":\"success\", \"custom_audience_id\":\"12345\", \"lookalike_audience_id\": \"678999\"}]"));
+
             global.test_stubs = [];
             test_stubs.push(mock_request_1);
             test_stubs.push(mock_request_2);
+            test_stubs.push(mock_request_3);
+            test_stubs.push(mock_request_4);
+            test_stubs.push(mock_request_5);
         });
         it('should find the right match for /5/:test/delete in stubs and receive url of /5/4536354345/delete', function() {
-            assert.deepEqual(url_parser.check_url_match(url_parser.build_url_storage_linked_list("/5/4536354345/delete"), test_stubs), true);
+            assert.deepEqual(url_parser.has_matching_stub(url_parser.build_url_storage_linked_list("/5/4536354345/delete"), test_stubs) != null, true);
+        });
+        it('should find the right match for /account/:varying_var/delete/ in stubs and receive url of /account/4536354345/delete', function() {
+            assert.deepEqual(url_parser.has_matching_stub(url_parser.build_url_storage_linked_list("/account/4536354345/delete"), test_stubs) != null, true);
+        });
+        it('should find the right match for /:varying_var/delete/ in stubs and receive url of /account/4536354345/delete', function() {
+            assert.deepEqual(url_parser.has_matching_stub(url_parser.build_url_storage_linked_list("/4536354345/delete"), test_stubs) != null, true);
+        });
+        it('should find the right match for /delete/:varying_var/ in stubs and receive url of /account/4536354345/delete', function() {
+            assert.deepEqual(url_parser.has_matching_stub(url_parser.build_url_storage_linked_list("/4536354345/delete"), test_stubs) != null, true);
         });
     });
 

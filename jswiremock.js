@@ -25,22 +25,24 @@ exports.jswiremock = function(port){
     };
 
     app.get('/*', function (req, res) {
-        if( url_parser.check_url_match(url_parser.build_url_storage_linked_list(req.originalUrl), stubs) ){    //stubs[req.originalUrl] != null){
-            for(var key in stubs[req.originalUrl].get_mock_response().getHeader()){
-                res.set(key, stubs[req.originalUrl].get_mock_response().getHeader()[key]);
+        var returned_stub = url_parser.has_matching_stub(url_parser.build_url_storage_linked_list(req.originalUrl), stubs)
+
+        if (returned_stub != null){
+            for(var key in returned_stub.get_mock_response().getHeader()){
+                res.set(key, returned_stub.get_mock_response().getHeader()[key]);
             }
-            res.status(stubs[req.originalUrl].get_mock_response().getStatus())
-            res.send(stubs[req.originalUrl].get_mock_response().getBody());
+            res.status(returned_stub.get_mock_response().getStatus());
+            res.send(returned_stub.get_mock_response().getBody());
         }
         else{
-            //TODO throw an error or end it gracefully.
+            res.status(404);
+            res.send("Does not exist");
         }
     });
     return this;
 }
 
 exports.urlEqualTo = function(url){
-    /* TODO: put URL checking logic here.*/
     var mock_request = new MockRequest(url);
     return mock_request;
 }

@@ -36,15 +36,15 @@ exports.build_url_storage_linked_list = function(url){
     return parent_node;
 };
 
-exports.check_url_match = function(received_url_parts_linked_list, stubs){
+exports.has_matching_stub = function(received_url_parts_linked_list, stubs){
     for(var counter=0; counter < stubs.length; counter++){
         if (recursive_url_linked_list_search(received_url_parts_linked_list, stubs[counter].getUrl()) == true){
-            return true;
+            return stubs[counter];
         } else{
             continue;
         }
     }
-    return false;
+    return null;
 };
 
 function recursive_url_linked_list_search(receive_url_parts, stored_url_parts){

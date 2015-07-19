@@ -5,7 +5,7 @@ Miss WireMock in Java? This is the Nodejs sibling to WireMock. At least that is 
 ## Right now in v0.2:
 
 - Simple GET and POST requests can be mocked.
-- Fixed and Dynamic URL stubs (ex: /1/:dynamic_var/delete)
+- Fixed and Dynamic URL stubs (ex: /account/:varying_var/delete/)
 
 ## Installation
      $ npm install jswiremock
@@ -17,13 +17,13 @@ Miss WireMock in Java? This is the Nodejs sibling to WireMock. At least that is 
 var jswiremocklib, jswiremock, stubFor, get, urlEqualTo, a_response;
 jswiremocklib = require('jswiremock'), jswiremock = jswiremocklib.jswiremock, stubFor = jswiremocklib.stubFor, get = jswiremocklib.get, urlEqualTo = jswiremocklib.urlEqualTo, a_response = jswiremocklib.a_response;
 
-var jswiremock = new jswiremock(5001);
+var jswiremock = new jswiremock(5001); //port
 
-stubFor(jswiremock, get(urlEqualTo("/1"))
+stubFor(jswiremock, get(urlEqualTo("/account/:varying_var/delete/"))
     .willReturn(a_response()
         .withStatus(200)
         .withHeader({"Content-Type": "application/json"})
-        .withBody("[{\"status\":\"success\", \"custom_audience_id\":\"12345\", \"lookalike_audience_id\": \"678999\"}]")));
+        .withBody("[{\"status\":\"success\"}]")));
 
 jswiremock.stop_js_wire_mock();
 ```
