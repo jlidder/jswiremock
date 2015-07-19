@@ -15,7 +15,7 @@ Miss WireMock in Java? This is the Nodejs sibling to WireMock. At least that is 
 
 ```javascript
 var jswiremocklib, jswiremock, stubFor, get, urlEqualTo, a_response;
-jswiremocklib = require('../jswiremock'), jswiremock = jswiremocklib.jswiremock, stubFor = jswiremocklib.stubFor, get = jswiremocklib.get, urlEqualTo = jswiremocklib.urlEqualTo, a_response = jswiremocklib.a_response;
+jswiremocklib = require('jswiremock'), jswiremock = jswiremocklib.jswiremock, stubFor = jswiremocklib.stubFor, get = jswiremocklib.get, urlEqualTo = jswiremocklib.urlEqualTo, a_response = jswiremocklib.a_response;
 
 var jswiremock = new jswiremock(5001);
 
