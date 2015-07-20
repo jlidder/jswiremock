@@ -1,6 +1,6 @@
 {
   "name": "jswiremock",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A library used for stubbing and mocking web services.",
   "scripts": {
     "test": "mocha tests/*"
