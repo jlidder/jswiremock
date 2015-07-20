@@ -5,7 +5,7 @@
 var express = require('express');
 var app = express();
 
-var url_parser = require('./url_parser');
+var urlParser = require('./urlparser');
 
 exports.jswiremock = function(port){
 
@@ -16,23 +16,27 @@ exports.jswiremock = function(port){
 
     global.stubs = [];
 
-    this.add_stub = function(mock_request){
-        global.stubs.push(mock_request);
+    this.addStub = function(mockRequest){
+        global.stubs.push(mockRequest);
     };
 
     this.stop_js_wire_mock = function(){
         server.close();
     };
 
-    app.get('/*', function (req, res) {
-        var returned_stub = url_parser.has_matching_stub(url_parser.build_url_storage_linked_list(req.originalUrl), stubs)
+    this.stopJswiremock = function(){
+        server.close();
+    };
 
-        if (returned_stub != null){
-            for(var key in returned_stub.get_mock_response().getHeader()){
-                res.set(key, returned_stub.get_mock_response().getHeader()[key]);
+    app.get('/*', function (req, res) {
+        var returnedStub = urlParser.hasMatchingStub(urlParser.buildUrlStorageLinkedList(req.originalUrl), stubs)
+
+        if (returnedStub != null){
+            for(var key in returnedStub.getMockResponse().getHeader()){
+                res.set(key, returnedStub.getMockResponse().getHeader()[key]);
             }
-            res.status(returned_stub.get_mock_response().getStatus());
-            res.send(returned_stub.get_mock_response().getBody());
+            res.status(returnedStub.getMockResponse().getStatus());
+            res.send(returnedStub.getMockResponse().getBody());
         }
         else{
             res.status(404);
@@ -43,22 +47,22 @@ exports.jswiremock = function(port){
 }
 
 exports.urlEqualTo = function(url){
-    var mock_request = new MockRequest(url);
-    return mock_request;
+    var mockRequest = new MockRequest(url);
+    return mockRequest;
 }
 
-exports.get = function(mock_request_object){
-    mock_request_object.setRequestType("GET");
-    return mock_request_object;
+exports.get = function(mockRequest){
+    mockRequest.setRequestType("GET");
+    return mockRequest;
 }
 
-exports.post= function(mock_request_object){
-    mock_request_object.setRequestType("POST");
-    return mock_request_object;
+exports.post= function(mockRequest){
+    mockRequest.setRequestType("POST");
+    return mockRequest;
 }
 
-exports.stubFor = function(js_wire_mock, mock_request){
-    js_wire_mock.add_stub(mock_request);
+exports.stubFor = function(jsWireMock, mockRequest){
+    jsWireMock.addStub(mockRequest);
 }
 
 exports.a_response = function(){
@@ -66,28 +70,28 @@ exports.a_response = function(){
 }
 
 function MockRequest(url) {
-    this.url = url_parser.build_url_storage_linked_list(url);
-    this.mock_response = null;
-    this.request_type = null;
+    this.url = urlParser.buildUrlStorageLinkedList(url);
+    this.mockResponse = null;
+    this.requestType = null;
 
     this.getUrl = function(){
         return this.url;
     }
 
-    this.get_mock_response = function(){
-        return this.mock_response;
+    this.getMockResponse = function(){
+        return this.mockResponse;
     }
 
-    this.willReturn = function(mock_response){
-        this.mock_response = mock_response;
+    this.willReturn = function(mockResponse){
+        this.mockResponse = mockResponse;
         return this;
     }
 
-    this.setRequestType = function(request_type){
-        this.request_type = request_type;
+    this.setRequestType = function(requestType){
+        this.requestType = requestType;
     };
     this.getRequestType = function(){
-        return this.request_type;
+        return this.requestType;
     }
 }
 
