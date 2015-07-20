@@ -1,11 +1,14 @@
 # jswiremock [![Build Status](https://travis-ci.org/jlidder/jswiremock.svg?branch=master)](https://travis-ci.org/jlidder/jswiremock)
 
-Miss WireMock in Java? This is the Nodejs sibling to WireMock. At least that is the goal!
+Miss WireMock in Java? This is the Nodejs sibling to WireMock. At least that is the goal! 
 
-## Right now in v0.2:
+Jswiremock is a flexible http api mocking library.
+
+## Right now in v0.3:
 
 - Simple GET and POST requests can be mocked.
 - Fixed and Dynamic URL stubs (ex: /account/:varying_var/delete/)
+- Fixed and Dynamic Query parameters (ex: /account/234234?active=:var&cool=true
 
 ## Installation
      $ npm install jswiremock
@@ -25,12 +28,8 @@ stubFor(jswiremock, get(urlEqualTo("/account/:varying_var/delete/"))
         .withHeader({"Content-Type": "application/json"})
         .withBody("[{\"status\":\"success\"}]")));
 
-jswiremock.stop_js_wire_mock();
+jswiremock.stopJswiremock();
 ```
-
-## Design
-
-Everything is built on top of Express js.
 
 ## Issues or new feature requests
 
