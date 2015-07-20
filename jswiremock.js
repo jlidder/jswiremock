@@ -5,7 +5,7 @@
 var express = require('express');
 var app = express();
 
-var urlParser = require('./urlparser');
+var urlParser = require('./UrlParser');
 
 exports.jswiremock = function(port){
 
