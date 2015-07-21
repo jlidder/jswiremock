@@ -14,10 +14,17 @@ exports.jswiremock = function(port){
         var port = server.address().port;
     });
 
-    global.stubs = [];
+    global.getRequestStubs = [];
+    global.postRequestStubs = [];
+    global.putRequestStubs = [];
+    global.deleteRequestStubs = [];
 
     this.addStub = function(mockRequest){
-        global.stubs.push(mockRequest);
+        if(mockRequest.getRequestType() === "GET") {
+            global.getRequestStubs.push(mockRequest);
+        } else if(mockRequest.getRequestType() === "POST"){
+            global.postRequestStubs.push(mockRequest);
+        }
     };
 
     this.stop_js_wire_mock = function(){
@@ -28,8 +35,12 @@ exports.jswiremock = function(port){
         server.close();
     };
 
+    this.buildResponse = function(res){
+        //TODO
+    };
+
     app.get('/*', function (req, res) {
-        var returnedStub = urlParser.hasMatchingStub(urlParser.buildUrlStorageLinkedList(req.originalUrl), stubs)
+        var returnedStub = urlParser.hasMatchingStub(urlParser.buildUrlStorageLinkedList(req.originalUrl), getRequestStubs)
 
         if (returnedStub != null){
             for(var key in returnedStub.getMockResponse().getHeader()){
@@ -43,56 +54,94 @@ exports.jswiremock = function(port){
             res.send("Does not exist");
         }
     });
+
+    app.post('/*', function (req, res) {
+        var returnedStub = urlParser.hasMatchingStub(urlParser.buildUrlStorageLinkedList(req.originalUrl), postRequestStubs)
+
+        if (returnedStub != null){
+            //TODO - ONLY VERIFY POST REQUEST PARAMS
+            for(key in returnedStub.getParams()){
+                if(req.body[key] != null){
+                    if(req.body[key] === returnedStub.getParams()[key]){
+                        continue;
+                    }
+                } else {
+                    res.status(404);
+                    res.send("Does not exist");
+                }
+            }
+
+            for(var key in returnedStub.getMockResponse().getHeader()){
+                res.set(key, returnedStub.getMockResponse().getHeader()[key]);
+            }
+            res.status(returnedStub.getMockResponse().getStatus());
+            res.send(returnedStub.getMockResponse().getBody());
+        }
+        else{
+            res.status(404);
+            res.send("Does not exist");
+        }
+    });
+
     return this;
-}
+};
 
 exports.urlEqualTo = function(url){
     var mockRequest = new MockRequest(url);
     return mockRequest;
-}
+};
 
 exports.get = function(mockRequest){
     mockRequest.setRequestType("GET");
     return mockRequest;
-}
+};
 
-exports.post= function(mockRequest){
+exports.post= function(mockRequest, postParams){
     mockRequest.setRequestType("POST");
+    mockRequest.setPostParams(postParams);
     return mockRequest;
-}
+};
+
+exports.withPostParams = function(postParams){
+    return postParams;
+};
 
 exports.stubFor = function(jsWireMock, mockRequest){
     jsWireMock.addStub(mockRequest);
-}
+};
 
 exports.a_response = function(){
     return new MockResponse();
-}
+};
 
 function MockRequest(url) {
     this.url = urlParser.buildUrlStorageLinkedList(url);
     this.mockResponse = null;
     this.requestType = null;
+    this.postParams = null;
 
     this.getUrl = function(){
         return this.url;
-    }
-
+    };
     this.getMockResponse = function(){
         return this.mockResponse;
-    }
-
+    };
     this.willReturn = function(mockResponse){
         this.mockResponse = mockResponse;
         return this;
-    }
-
+    };
     this.setRequestType = function(requestType){
         this.requestType = requestType;
     };
     this.getRequestType = function(){
         return this.requestType;
-    }
+    };
+    this.setPostParams = function(postParams){
+        this.postParams = postParams;
+    };
+    this.getPostParams = function(){
+        return this.postParams;
+    };
 }
 
 function MockResponse(){
@@ -124,3 +173,10 @@ function MockResponse(){
     };
 }
 
+/*
+ stubFor(jswiremock, post(urlEqualTo("/account/:varying_var/delete/"), withPostParams({testdata_1 : 1, testdata_2 : 2}))
+ .willReturn(a_response()
+ .withStatus(200)
+ .withHeader({"Content-Type": "application/json"})
+ .withBody("[{\"status\":\"success\"}]")));
+ */

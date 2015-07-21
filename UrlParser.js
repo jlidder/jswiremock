@@ -64,10 +64,12 @@ exports.buildUrlStorageLinkedList = function(url){
     return parentNode;
 };
 
-exports.hasMatchingStub = function(receivedUrlPartsLinkedList, stubs){
-    for(var counter=0; counter < stubs.length; counter++){
-        if (recursiveUrlLinkedListSearch(receivedUrlPartsLinkedList, stubs[counter].getUrl()) == true){
-            return stubs[counter];
+exports.hasMatchingStub = function(receivedUrlPartsLinkedList, getRequestStubs){
+
+
+    for(var counter=0; counter < getRequestStubs.length; counter++){
+        if (recursiveUrlLinkedListSearch(receivedUrlPartsLinkedList, getRequestStubs[counter].getUrl()) == true){
+            return getRequestStubs[counter];
         } else{
             continue;
         }
