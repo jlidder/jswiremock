@@ -27,6 +27,12 @@ stubFor(jswiremock, get(urlEqualTo("/account/:varying_var/delete/"))
         .withStatus(200)
         .withHeader({"Content-Type": "application/json"})
         .withBody("[{\"status\":\"success\"}]")));
+        
+stubFor(jswiremock, post(urlEqualTo("/login"), {username: "captainkirk", password: "enterprise"})
+    .willReturn(a_response()
+        .withStatus(200)
+        .withHeader({})
+        .withBody("")));
 
 jswiremock.stopJswiremock();
 ```
