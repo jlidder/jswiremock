@@ -7,7 +7,7 @@ var chai = require('chai');
 chai.should();
 
 var jswiremocklib, stubFor, get, urlEqualTo, a_response;
-jswiremocklib = require('../jswiremock'), stubFor = jswiremocklib.stubFor, get = jswiremocklib.get, urlEqualTo = jswiremocklib.urlEqualTo, a_response = jswiremocklib.a_response;
+jswiremocklib = require('../jswiremock'), stubFor = jswiremocklib.stubFor, get = jswiremocklib.get, post = jswiremocklib.post, urlEqualTo = jswiremocklib.urlEqualTo, a_response = jswiremocklib.a_response;
 
 var urlParser = require('../UrlParser');
 
