@@ -7,7 +7,7 @@ var chai = require('chai');
 chai.should();
 
 var jswiremocklib, stubFor, get, urlEqualTo, a_response;
-jswiremocklib = require('../jswiremock'), stubFor = jswiremocklib.stubFor, get = jswiremocklib.get, urlEqualTo = jswiremocklib.urlEqualTo, a_response = jswiremocklib.a_response;
+jswiremocklib = require('../jswiremock'), stubFor = jswiremocklib.stubFor, get = jswiremocklib.get, post = jswiremocklib.post, urlEqualTo = jswiremocklib.urlEqualTo, a_response = jswiremocklib.a_response;
 
 var urlParser = require('../UrlParser');
 
@@ -109,6 +109,12 @@ describe('urlParser library', function() {
                     .withHeader({"Content-Type": "application/json"})
                     .withBody("[{\"status\":\"success\"}]"));
 
+            var mock_request_8 = post(urlEqualTo("/login"), {username: "captainkirk", password: "enterprise"})
+                .willReturn(a_response()
+                    .withStatus(200)
+                    .withHeader({"Content-Type": "application/json"})
+                    .withBody("[{\"status\":\"success\"}]"));
+
             global.test_stubs = [];
             test_stubs.push(mock_request_1);
             test_stubs.push(mock_request_2);
@@ -116,6 +122,9 @@ describe('urlParser library', function() {
             test_stubs.push(mock_request_4);
             test_stubs.push(mock_request_5);
             test_stubs.push(mock_request_7);
+
+            global.test_post_stubs = [];
+            test_post_stubs.push(mock_request_8);
         });
         it('should find the right match for /5/:test/delete in stubs and receive url of /5/4536354345/delete', function() {
             assert.deepEqual(urlParser.hasMatchingStub(urlParser.buildUrlStorageLinkedList("/5/4536354345/delete"), test_stubs) != null, true);
@@ -131,6 +140,9 @@ describe('urlParser library', function() {
         });
         it('should find the right match for /delete/:wtv/hello?meansit=:var in stubs and receive url of /delete/1/hello?meansit=7', function() {
             assert.deepEqual(urlParser.hasMatchingStub(urlParser.buildUrlStorageLinkedList("/delete/1/hello?meansit=7"), test_stubs) != null, true);
+        });
+        it('should find the right match for post request /login in stubs', function() {
+            assert.deepEqual(urlParser.hasMatchingStub(urlParser.buildUrlStorageLinkedList("/login"), test_post_stubs) != null, true);
         });
     });
 
