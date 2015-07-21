@@ -3,7 +3,13 @@
  */
 
 var express = require('express');
+var bodyParser = require('body-parser');
+
 var app = express();
+//app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+    extended: true
+}));
 
 var urlParser = require('./UrlParser');
 
@@ -60,9 +66,9 @@ exports.jswiremock = function(port){
 
         if (returnedStub != null){
             //TODO - ONLY VERIFY POST REQUEST PARAMS
-            for(key in returnedStub.getParams()){
+            for(key in returnedStub.getPostParams()){
                 if(req.body[key] != null){
-                    if(req.body[key] === returnedStub.getParams()[key]){
+                    if(req.body[key] === returnedStub.getPostParams()[key]){
                         continue;
                     }
                 } else {
