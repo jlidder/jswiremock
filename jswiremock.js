@@ -34,11 +34,11 @@ exports.jswiremock = function(port){
     };
 
     this.stop_js_wire_mock = function(){
-        server.close();
+        this.server.close();
     };
 
     this.stopJswiremock = function(){
-        server.close();
+        this.server.close();
     };
 
     this.buildResponse = function(res){
