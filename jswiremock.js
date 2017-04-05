@@ -33,12 +33,10 @@ exports.jswiremock = function(port){
         }
     };
 
-    this.stop_js_wire_mock = function(){
-        this.server.close();
-    };
-
     this.stopJswiremock = function(){
-        this.server.close();
+        //this.server.close(); (DOESN'T WORK)
+        //server.close(); (WORKS, BUT NEEDS CALLBACK, OTHERWISE PREMATURLY STOPS EVERYTHING ELSE.)
+        //process.exit();
     };
 
     this.buildResponse = function(res){
