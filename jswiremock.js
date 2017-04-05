@@ -15,7 +15,7 @@ var urlParser = require('./UrlParser');
 
 exports.jswiremock = function(port){
 
-    var server = app.listen(port, function () {
+    server = app.listen(port, function () {
         var host = server.address().address;
         var port = server.address().port;
     });
@@ -33,10 +33,8 @@ exports.jswiremock = function(port){
         }
     };
 
-    this.stopJswiremock = function(){
-        //this.server.close(); (DOESN'T WORK)
-        //server.close(); (WORKS, BUT NEEDS CALLBACK, OTHERWISE PREMATURLY STOPS EVERYTHING ELSE.)
-        //process.exit();
+    this.stopJSWireMock = function(){
+        server.close();
     };
 
     this.buildResponse = function(res){

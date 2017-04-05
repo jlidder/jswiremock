@@ -3,7 +3,8 @@
   "version": "0.3.3",
   "description": "A library used for stubbing and mocking web services.",
   "scripts": {
-    "test": "mocha tests/*"
+    "test": "mocha tests/*",
+    "integration e2e tests": "node tests/e2e_tests.js"
   },
   "private": false,
   "dependencies": {

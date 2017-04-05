@@ -18,7 +18,7 @@ Jswiremock is a flexible http api mocking library.
 
 ```javascript
 var jswiremocklib, jswiremock, stubFor, get, post, urlEqualTo, a_response;
-jswiremocklib = require('../jswiremock'), jswiremock = jswiremocklib.jswiremock, stubFor = jswiremocklib.stubFor, get = jswiremocklib.get, post = jswiremocklib.post, urlEqualTo = jswiremocklib.urlEqualTo, a_response = jswiremocklib.a_response;
+jswiremocklib = require('../jswiremock'), jswiremock = jswiremocklib.jswiremock, stubFor = jswiremocklib.stubFor, get = jswiremocklib.get, post = jswiremocklib.post, urlEqualTo = jswiremocklib.urlEqualTo, a_response = jswiremocklib.a_response, stopJSWireMock = jswiremocklib.stopJSWireMock;
 
 var jswiremock = new jswiremock(5001); //port
 
@@ -38,12 +38,14 @@ stubFor(jswiremock, post(urlEqualTo("/login"), {username: "captainkirk", passwor
  * Actual call to the stub below.
  */
 var request = require("request");
+var assert = require('assert');
+
 request({
-    uri: "http://localhost:5001/account/4444321/delete/",
+    uri: "http://localhost:5001/account/4444321/get/",
     method: "GET"
 }, function(error, response, body) {
-    console.log("asdfasdfasdfasdf");
-    console.log(body);
+    assert.strictEqual(body, "[{\"status\":\"success\"}]", 'get response is not the same.');
+    jswiremock.stopJSWireMock();
 });
 ```
 
