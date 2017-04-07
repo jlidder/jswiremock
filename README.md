@@ -7,7 +7,7 @@ Jswiremock is a flexible http api mocking library.
 ## Right now in v0.3:
 
 - Simple GET and POST requests can be mocked.
-- Fixed and Dynamic URL stubs (ex: /account/:varying_var/delete/)
+- Fixed and Dynamic URL stubs (ex: /account/:varying_var/get/)
 - Fixed and Dynamic Query parameters (ex: /account/234234?active=:var&cool=true
 
 ## Installation
@@ -22,7 +22,7 @@ jswiremocklib = require('../jswiremock'), jswiremock = jswiremocklib.jswiremock,
 
 var jswiremock = new jswiremock(5001); //port
 
-stubFor(jswiremock, get(urlEqualTo("/account/:varying_var/delete/"))
+stubFor(jswiremock, get(urlEqualTo("/account/:varying_var/get/"))
     .willReturn(a_response()
         .withStatus(200)
         .withHeader({"Content-Type": "application/json"})
