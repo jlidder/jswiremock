@@ -11,7 +11,7 @@ function UrlNode(data){
     };
     this.setData = function(data){
         this.data = data;
-    }
+    };
     this.getNext = function(){
         return this.next;
     };
@@ -64,14 +64,14 @@ exports.buildUrlStorageLinkedList = function(url){
     return parentNode;
 };
 
+exports.isMatchingStub = function(receivedUrlPartsLinkedList, requestStub) {
+    return recursiveUrlLinkedListSearch(receivedUrlPartsLinkedList, requestStub.getUrl());
+};
+
 exports.hasMatchingStub = function(receivedUrlPartsLinkedList, getRequestStubs){
-
-
     for(var counter=0; counter < getRequestStubs.length; counter++){
-        if (recursiveUrlLinkedListSearch(receivedUrlPartsLinkedList, getRequestStubs[counter].getUrl()) == true){
+        if (exports.isMatchingStub(receivedUrlPartsLinkedList, getRequestStubs[counter])) {
             return getRequestStubs[counter];
-        } else{
-            continue;
         }
     }
     return null;
