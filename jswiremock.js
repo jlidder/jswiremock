@@ -25,6 +25,9 @@ exports.jswiremock = function(port){
     global.putRequestStubs = [];
     global.deleteRequestStubs = [];
 
+    global.getRequests = [];
+    global.postRequests = [];
+
     this.addStub = function(mockRequest){
         if(mockRequest.getRequestType() === "GET") {
             global.getRequestStubs.push(mockRequest);
@@ -34,7 +37,48 @@ exports.jswiremock = function(port){
     };
 
     this.stopJSWireMock = function(){
+        global.getRequestStubs = [];
+        global.postRequestStubs = [];
+        global.putRequestStubs = [];
+        global.deleteRequestStubs = [];
+
+        global.getRequests = [];
+        global.postRequests = [];
+
         server.close();
+        setImmediate(function(){server.emit('close')});
+    };
+
+    this.verify = function (count, mockRequest) {
+        var array;
+        if (mockRequest.getRequestType() === "GET") {
+            array = global.getRequests;
+        } else if (mockRequest.getRequestType() === "POST") {
+            array = global.postRequests;
+        }
+        var counter = 0;
+        for (var i in array) {
+            if (urlParser.isMatchingStub(urlParser.buildUrlStorageLinkedList(array[i].originalUrl), mockRequest)) {
+                if (mockRequest.getRequestType() === "POST") {
+                    var allMatch = true;
+                    for (var key in mockRequest.getPostParams()) {
+                        if (array[i].body[key] != null) {
+                            if (array[i].body[key] !== mockRequest.getPostParams()[key]) {
+                                allMatch = false;
+                            }
+                        } else {
+                            allMatch = false;
+                        }
+                    }
+                    if (allMatch) {
+                        counter++;
+                    }
+                } else {
+                    counter++;
+                }
+            }
+        }
+        return counter === count;
     };
 
     this.buildResponse = function(res){
@@ -50,7 +94,8 @@ exports.jswiremock = function(port){
     });
 
     app.get('/*', function (req, res) {
-        var returnedStub = urlParser.hasMatchingStub(urlParser.buildUrlStorageLinkedList(req.originalUrl), getRequestStubs)
+        getRequests.push(req);
+        var returnedStub = urlParser.hasMatchingStub(urlParser.buildUrlStorageLinkedList(req.originalUrl), getRequestStubs);
 
         if (returnedStub != null){
             for(var key in returnedStub.getMockResponse().getHeader()){
@@ -66,7 +111,8 @@ exports.jswiremock = function(port){
     });
 
     app.post('/*', function (req, res) {
-        var returnedStub = urlParser.hasMatchingStub(urlParser.buildUrlStorageLinkedList(req.originalUrl), postRequestStubs)
+        postRequests.push(req);
+        var returnedStub = urlParser.hasMatchingStub(urlParser.buildUrlStorageLinkedList(req.originalUrl), postRequestStubs);
 
         if (returnedStub != null){
             //TODO - ONLY VERIFY POST REQUEST PARAMS
@@ -182,11 +228,3 @@ function MockResponse(){
         return this.header;
     };
 }
-
-/*
- stubFor(jswiremock, post(urlEqualTo("/account/:varying_var/delete/"), withPostParams({testdata_1 : 1, testdata_2 : 2}))
- .willReturn(a_response()
- .withStatus(200)
- .withHeader({"Content-Type": "application/json"})
- .withBody("[{\"status\":\"success\"}]")));
- */
