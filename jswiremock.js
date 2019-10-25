@@ -6,18 +6,25 @@ var express = require('express');
 var bodyParser = require('body-parser');
 
 var app = express();
-//app.use( bodyParser.json() );       // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-    extended: true
-}));
 
 var urlParser = require('./UrlParser');
 
-exports.jswiremock = function(port){
+exports.jswiremock = function(port, bodyEncoding){
+    switch((bodyEncoding || 'url').toLowerCase()){
+        case 'json':
+            app.use(bodyParser.json());
+            break;
+        case 'url':
+        default:
+            app.use(bodyParser.urlencoded({
+                extended: true
+            }));
+            break;
+    }
 
     server = app.listen(port, function () {
-        var host = server.address().address;
-        var port = server.address().port;
+        server.address().address;
+        server.address().port;
     });
 
     global.getRequestStubs = [];
