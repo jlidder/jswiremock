@@ -60,17 +60,9 @@ exports.jswiremock = function(port){
         for (var i in array) {
             if (urlParser.isMatchingStub(urlParser.buildUrlStorageLinkedList(array[i].originalUrl), mockRequest)) {
                 if (mockRequest.getRequestType() === "POST") {
-                    var allMatch = true;
-                    for (var key in mockRequest.getPostParams()) {
-                        if (array[i].body[key] != null) {
-                            if (array[i].body[key] !== mockRequest.getPostParams()[key]) {
-                                allMatch = false;
-                            }
-                        } else {
-                            allMatch = false;
-                        }
-                    }
-                    if (allMatch) {
+                    var bodiesMatch = recursiveBodyMatch(mockRequest.getPostParams(), array[i].body);
+
+                    if (bodiesMatch) {
                         counter++;
                     }
                 } else {
@@ -80,6 +72,39 @@ exports.jswiremock = function(port){
         }
         return counter === count;
     };
+
+    var recursiveBodyMatch = function(bodyOne, bodyTwo){
+        if(Array.isArray(bodyOne)){
+            if(bodyOne.length != bodyTwo.length)
+                return false;
+
+            for(var i = 0; i < bodyOne.length; i++){
+                if(bodyTwo[i] == undefined || !recursiveBodyMatch(bodyOne[i], bodyTwo[i]))
+                    return false;
+            }
+
+            return true;
+        }
+
+        if(typeof(bodyOne) == "object"){
+            for(var key in bodyOne){
+                if(bodyTwo[key] == undefined || !recursiveBodyMatch(bodyOne[key], bodyTwo[key]))
+                    return false;
+            }
+
+            return true;
+        }
+
+        var dateCast = Date.parse(bodyOne);
+        if(!isNaN(dateCast)){
+            if(dateCast != Date.parse(bodyTwo))
+                return false;
+
+            return true;
+        }
+
+        return bodyOne == bodyTwo;
+    }
 
     this.buildResponse = function(res){
         //TODO
